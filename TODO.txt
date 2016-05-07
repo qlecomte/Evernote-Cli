@@ -1,0 +1,13 @@
+Version 0.2
+- Supprimer des notes
+- Updater une note
+- Notebook
+    - créer un notebook
+    - supprimer
+    - Modifier nom
+    - Ajouter / supprimer note
+- Tags
+    - Créer un tag
+    - Supprimer
+    - Modifier nom
+    - Ajouter / Supprimer a une note

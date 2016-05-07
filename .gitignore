@@ -1,0 +1,7 @@
+# remove Builds
+build-Debug/*
+build-Release/*
+
+# Remove user files
+*.pro.user
+
