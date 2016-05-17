@@ -1,3 +1,13 @@
+/*
+ * Auteur : Quentin LECOMTE
+ * Date de création : 01/05/2016
+ * Date de dernière modification : 18/05/2016
+ * Version : 0.2.0
+ * Nom de la classe : Evernote
+ * Description : Classe de gestion pour télécharger et récupérer des informations du SDK Evernote
+ * Licence : Licence GNU GPL v3 - http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
 #ifndef EVERNOTE_H
 #define EVERNOTE_H
 

@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra
 
 INCLUDEPATH += /usr/local/include/thrift
 
@@ -45,7 +45,8 @@ HEADERS += \
     notes.h \
     note.h \
     notebook.h \
-    tag.h
+    tag.h \
+    consoleutils.h
 
 OTHER_FILES += \
     build-Debug/config.ini \

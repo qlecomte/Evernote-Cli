@@ -17,9 +17,9 @@ int main(int argc, char* argv[])
         primary.add_options()
             ("help,h", "produce help message")
             ("example", "Show some examples how you should use it")
-            ("get-note", "Display the content of the note, must be used with --title (at least)" )
-            ("get-all-notes", "get all the notes in the account")
-            ("create-note", "Create a new note" )
+            ("licence", "Show the licence (GNU GPL v3")
+            ("get", po::value<string>(), "Obtenir")
+            ("create", po::value<string>(), "Créer")
         ;
 
         po::options_description moreOptions("More options");
@@ -45,24 +45,58 @@ int main(int argc, char* argv[])
 
             return 0;
         }
+        if (vm.count("example")){
+            cout << "Examples to Write" << endl;
 
-        if (vm.count("get-note")) {
-            string note;
-            if (vm.count("title")){
-                if (vm.count("notebook")){
-                    note = Notebook(vm["notebook"].as<string>()).getNotes().getNote(vm["title"].as<string>()).getContent();
+            return 0;
+        }
+        if (vm.count("get")){
+            if (boost::iequals(vm["get"].as<string>(), "note")){
+                Note note;
+                if (vm.count("title")){
+                    if (vm.count("notebook")){
+                        note = Notebook(vm["notebook"].as<string>()).getNotes().getNote(vm["title"].as<string>());
+                    }else{
+                        note = Notes().getNote(vm["title"].as<string>());
+                    }
+
+                    cout << note << endl;
                 }else{
-                    note = Notes().getNote(vm["title"].as<string>()).getContent();
+                    cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
                 }
+            }
+            if (boost::iequals(vm["get"].as<string>(), "notebook")){
 
-                cout << note << endl;
-            }else{
-                cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
+            }
+            if (boost::iequals(vm["get"].as<string>(), "tag")){
+
             }
 
             return 0;
         }
-        if (vm.count("get-all-notes")) {
+        if (vm.count("create")){
+            if (boost::iequals(vm["get"].as<string>(), "note")){
+                if (vm.count("title")) {
+                    Note note;
+                    note.setTitle(vm["title"].as<string>());
+                    if (vm.count("content")){
+                        note.setContent(vm["content"].as<string>());
+                    }
+
+                    if (vm.count("notebook")){
+                        note.setNotebook(Notebook(vm["notebook"].as<string>()));
+                    }
+
+                    note.create();
+                }else{
+                    cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
+                }
+            }
+
+            return 0;
+        }
+
+        /*if (vm.count("get-all-notes")) {
             vector<string> notes;
             if (vm.count("notebook")){
                 notes = Notebook(vm["notebook"].as<string>()).getNotes().getTitles();
@@ -75,26 +109,7 @@ int main(int argc, char* argv[])
             }
 
             return 0;
-        }
-        if (vm.count("create-note")) {
-            if (vm.count("title")) {
-                Note note;
-                note.setTitle(vm["title"].as<string>());
-                if (vm.count("content")){
-                    note.setContent(vm["content"].as<string>());
-                }
-
-                if (vm.count("notebook")){
-                    note.setNotebook(Notebook(vm["notebook"].as<string>()));
-                }
-
-                note.create();
-            }else{
-                cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
-            }
-
-            return 0;
-        }
+        }*/
 
 
         else {

@@ -6,7 +6,7 @@ Notebook::Notebook()
 Notebook::Notebook(string name)
 {
     vector<en::Notebook> notebooks = evernote.dlNotebooks();
-    for (vector<en::Notebook>::iterator it = notebooks.begin(); it != notebooks.end(); ++it){
+    for (vector<en::Notebook>::const_iterator it = notebooks.cbegin(); it != notebooks.cend(); ++it){
         if ( boost::iequals(((en::Notebook)*it).name, name)){
             notebook = *it;
         }
@@ -16,18 +16,15 @@ Notebook::Notebook(string name)
 Notebook::Notebook(en::Notebook nb) : notebook(nb)
 {}
 
-string Notebook::getName()
-{
+string Notebook::getName() const{
     return notebook.name;
 }
 
-string Notebook::getGuid()
-{
+string Notebook::getGuid() const{
     return notebook.guid;
 }
 
-bool Notebook::isDefault()
-{
+bool Notebook::isDefault() const{
     return notebook.defaultNotebook;
 }
 

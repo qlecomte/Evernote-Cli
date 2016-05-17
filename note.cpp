@@ -1,4 +1,5 @@
 #include "note.h"
+#include "consoleutils.h"
 
 Note::Note(){}
 
@@ -9,20 +10,24 @@ Note::Note(string guid){
 Note::Note(en::Note n) : note(n)
 {}
 
-string Note::getTitle(){
+string Note::getTitle() const{
     return note.title;
 }
 
-string Note::getContent(){
-    return note.content;
+string Note::getContent() const{
+    string c = note.content;
+    boost::replace_first(c, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note><div>", "");
+    boost::replace_last(c, "<br clear=\"none\"/></div></en-note>", "");
+    return c;
 }
 
-string Note::getGuid(){
+string Note::getGuid() const{
     return note.guid;
 }
 
 Notebook Note::getNotebook(){
     return Notebook(evernote.dlNotebook(note.notebookGuid).name);
+
 }
 
 void Note::setTitle(string title)
@@ -40,7 +45,6 @@ void Note::setContent(string content)
 {
     string header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\"><en-note><div>" ;
     string footer = "<br clear=\"none\"/></div></en-note>";
-
 
     note.content = header + content + footer;
     note.__isset.content = true;
@@ -74,4 +78,13 @@ void Note::removeTag(Tag tag)
 void Note::create()
 {
     evernote.createNote(note);
+}
+
+ostream& operator << (ostream& os, const Note& note){
+    os << ConsoleUtils::boldOn << ConsoleUtils::setColorRed << "Titre : " << ConsoleUtils::resetColor << ConsoleUtils::boldOff;
+    os << note.getTitle() << endl;
+    os << ConsoleUtils::boldOn << ConsoleUtils::setColorYellow << "Contenu : " << ConsoleUtils::resetColor << ConsoleUtils::boldOff;
+    os << note.getContent();
+    //os << note.getNotebook().getName();
+    return os;
 }
