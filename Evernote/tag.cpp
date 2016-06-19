@@ -1,8 +1,9 @@
 #include "tag.h"
 
+using namespace std;
+
 Tag::Tag()
-{
-}
+{}
 
 Tag::Tag(string name)
 {
@@ -15,9 +16,7 @@ Tag::Tag(string name)
 }
 
 Tag::Tag(evernote::edam::Tag tag) : tag(tag)
-{
-
-}
+{}
 
 string Tag::getName()
 {

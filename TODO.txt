@@ -1,8 +1,8 @@
 Version 0.2
 - Supprimer des notes
 - Updater une note
+- Gérer les doublons
 - Notebook
-    - créer un notebook
     - supprimer
     - Modifier nom
     - Ajouter / supprimer note

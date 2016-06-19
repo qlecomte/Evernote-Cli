@@ -22,11 +22,12 @@ SOURCES += main.cpp \
     sdk-evernote/UserStore_constants.cpp \
     sdk-evernote/UserStore_types.cpp \
     sdk-evernote/UserStore.cpp \
-    evernote.cpp \
-    notes.cpp \
-    note.cpp \
-    notebook.cpp \
-    tag.cpp
+    Evernote/evernote.cpp \
+    Evernote/note.cpp \
+    Evernote/notebook.cpp \
+    Evernote/notes.cpp \
+    Evernote/resource.cpp \
+    Evernote/tag.cpp
 
 HEADERS += \
     sdk-evernote/Errors_constants.h \
@@ -41,12 +42,13 @@ HEADERS += \
     sdk-evernote/UserStore_constants.h \
     sdk-evernote/UserStore_types.h \
     sdk-evernote/UserStore.h \
-    evernote.h \
-    notes.h \
-    note.h \
-    notebook.h \
-    tag.h \
-    consoleutils.h
+    consoleutils.h \
+    Evernote/evernote.h \
+    Evernote/note.h \
+    Evernote/notebook.h \
+    Evernote/notes.h \
+    Evernote/resource.h \
+    Evernote/tag.h
 
 OTHER_FILES += \
     build-Debug/config.ini \

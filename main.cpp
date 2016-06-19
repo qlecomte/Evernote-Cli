@@ -1,14 +1,39 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 using namespace std;
 
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 namespace po = boost::program_options;
 
 #include "note.h"
 #include "notes.h"
 #include "notebook.h"
+
+string getFileContent(string filename){
+    ifstream in(filename, ios::in);
+
+    if (in){
+        ostringstream content;
+        string line;
+        bool first = true;
+        while(getline(in, line)){
+            if (first){
+                first = false;
+            }else{
+                content << "</div><div>";
+            }
+            content << line ;
+        }
+
+        return content.str();
+    } else{
+        cerr << "Fichier non trouvé." << endl;
+        return NULL;
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -20,6 +45,7 @@ int main(int argc, char* argv[])
             ("licence", "Show the licence (GNU GPL v3")
             ("get", po::value<string>(), "Obtenir")
             ("create", po::value<string>(), "Créer")
+            ("update", po::value<string>(), "Mettre à jour")
         ;
 
         po::options_description moreOptions("More options");
@@ -27,7 +53,9 @@ int main(int argc, char* argv[])
             ("notebook,n", po::value<string>(), "Specify an notebook to use")
             ("title,t", po::value<string>(), "Specify the title of the note")
             ("content,c", po::value<string>(), "Specify the content of the note")
+            ("file-content", po::value<string>(), "Specify a file to use as content")
             ("tag", po::value<vector<string>>()->multitoken(), "Specify the tag of the note")
+            ("download-media", "Download the media files included in the note");
         ;
 
         po::options_description cmdline_options;
@@ -61,28 +89,40 @@ int main(int argc, char* argv[])
                     }
 
                     cout << note << endl;
+
+                    if (vm.count("download-media")){
+                        note.downloadMedias();
+                    }
                 }else{
-                    cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
+                    cout << "-t (or --title) is mandatory. Please use --example to see some examples if you need to." << endl;
                 }
             }
-            if (boost::iequals(vm["get"].as<string>(), "notebook")){
-
+            else if (boost::iequals(vm["get"].as<string>(), "notebook")){
+                Notebook notebook;
+                if (vm.count("notebook")){
+                    notebook = Notebook(vm["notebook"].as<string>());
+                    cout << notebook << endl;
+                }else{
+                    cout << "-n (or --notebook) is mandatory. Please use --example to see some examples if you need to." << endl;
+                }
             }
-            if (boost::iequals(vm["get"].as<string>(), "tag")){
-
-            }
+            else if (boost::iequals(vm["get"].as<string>(), "tag")){}
 
             return 0;
         }
         if (vm.count("create")){
-            if (boost::iequals(vm["get"].as<string>(), "note")){
+            if (boost::iequals(vm["create"].as<string>(), "note")){
                 if (vm.count("title")) {
                     Note note;
                     note.setTitle(vm["title"].as<string>());
                     if (vm.count("content")){
                         note.setContent(vm["content"].as<string>());
                     }
-
+                    if (vm.count("file-content")){
+                        string str = getFileContent(vm["file-content"].as<string>());
+                        cout << str << endl;
+                        note.setContent(str);
+                    }
                     if (vm.count("notebook")){
                         note.setNotebook(Notebook(vm["notebook"].as<string>()));
                     }
@@ -92,42 +132,47 @@ int main(int argc, char* argv[])
                     cout << "-t (or title) is mandatory. Please use --example to see some examples if you need to." << endl;
                 }
             }
-
+            else if (boost::iequals(vm["create"].as<string>(), "notebook")){
+                if (vm.count("notebook")){
+                    Notebook notebook;
+                    notebook.setName(vm["notebook"].as<string>());
+                    notebook.create();
+                }else{
+                    cout << "-n (or --notebook) is mandatory. Please use --example to see some examples if you need to." << endl;
+                }
+            }
+            return 0;
+        }
+        if (vm.count("delete")){
+            if (boost::iequals(vm["update"].as<string>(), "note")){}
+            if (boost::iequals(vm["update"].as<string>(), "notebook")){
+                if (vm.count("notebook")){
+                    Notebook notebook;
+                    notebook.setName(vm["notebook"].as<string>());
+                    notebook.create();
+                }else{
+                    cout << "-n (or --notebook) is mandatory. Please use --example to see some examples if you need to." << endl;
+                }
+            }
             return 0;
         }
 
-        /*if (vm.count("get-all-notes")) {
-            vector<string> notes;
-            if (vm.count("notebook")){
-                notes = Notebook(vm["notebook"].as<string>()).getNotes().getTitles();
-            }else{
-                notes = Notes().getTitles();
-            }
 
-            for (vector<string>::iterator it = notes.begin(); it != notes.end(); ++it){
-                cout << *it << endl;
-            }
+        cout << "Use -h (or --help) to display help" << endl;
 
-            return 0;
-        }*/
-
-
-        else {
-            cout << "Use -h (or --help) to display help" << endl;
-        }
-
-    }
-    catch(exception& e) {
+    }catch(exception& e) {
         cerr << "error: " << e.what() << endl;
 
         return 1;
-    }
-    catch(...) {
+    }catch(...) {
         cerr << "Exception of unknown type!" << endl;
 
         return 1;
     }
+
     return 0;
 }
+
+
 
 

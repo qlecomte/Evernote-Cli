@@ -44,7 +44,6 @@ namespace ConsoleUtils
     inline std::ostream &resetColor(std::ostream& os){
         return os << "\e[0;39m" ;
     }
-
 }
 
 #endif // CONSOLEUTILS_H

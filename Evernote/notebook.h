@@ -12,25 +12,31 @@
 #define NOTEBOOK_H
 
 #include <string>
-using namespace std;
+
+#include <boost/algorithm/string.hpp>
 
 #include "evernote.h"
 #include "sdk-evernote/Types_types.h"
 namespace en = evernote::edam;
 
+#include "consoleutils.h"
 #include "notes.h"
 
 class Notebook
 {
 public:
     Notebook();
-    Notebook(string title);
+    Notebook(std::string title);
     Notebook(en::Notebook nb);
 
-    string getName() const;
-    string getGuid() const;
+    std::string getName() const;
+    std::string getGuid() const;
     bool isDefault() const;
     Notes getNotes();
+    void setName(std::string name);
+    void create();
+
+    friend std::ostream& operator << (std::ostream&, const Notebook& notebook);
 
 private:
     en::Notebook notebook;

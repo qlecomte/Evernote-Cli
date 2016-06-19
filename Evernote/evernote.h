@@ -18,13 +18,11 @@
 // Boost headers
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
-#include <boost/algorithm/string.hpp>
 
 // Std headers
 #include <string>
 #include <iostream>
 #include <vector>
-using namespace std;
 
 // Evernote SDK headers
 #include "sdk-evernote/UserStore.h"
@@ -38,6 +36,7 @@ namespace en = evernote::edam;
 class Note;
 class Notebook;
 class Notes;
+class Resource;
 class Tag;
 
 class Evernote
@@ -48,14 +47,16 @@ public:
 
     en::NotesMetadataList dlNotes();
     en::NotesMetadataList dlNotes(en::NoteFilter filter);
-    en::Note dlNote(string guid);
-    vector<en::Notebook> dlNotebooks();
-    en::Notebook dlNotebook(string guid);
-    vector<en::Tag> dlTags();
+    en::Note dlNote(std::string guid);
+    std::vector<en::Notebook> dlNotebooks();
+    en::Notebook dlNotebook(std::string guid);
+    std::vector<en::Tag> dlTags();
     void createNote(en::Note note);
+    void createNotebook(en::Notebook nb);
 
 private:
-    string getAuthToken();
+    std::string getAuthToken() const;
+    std::string getErrorString(en::EDAMErrorCode::type e) const;
 
     en::NoteStoreClient* noteStore;
     en::UserStoreClient* userStore;

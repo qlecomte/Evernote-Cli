@@ -13,12 +13,14 @@
 
 #include <string>
 #include <vector>
-using namespace std;
+
+#include <boost/algorithm/string.hpp>
 
 #include "evernote.h"
 #include "sdk-evernote/Types_types.h"
 namespace en = evernote::edam;
 
+#include "consoleutils.h"
 #include "note.h"
 
 class Notes
@@ -27,9 +29,11 @@ public:
     Notes();
     Notes(en::NotesMetadataList n);
 
-    Note getNote(string title);
-    vector<string> getTitles() const;
+    Note getNote(std::string title);
+    std::vector<std::string> getTitles() const;
     size_t count() const;
+
+    friend std::ostream& operator << (std::ostream&, const Notes& notes);
 
 private:
     en::NotesMetadataList notes;
